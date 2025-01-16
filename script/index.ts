@@ -1,13 +1,25 @@
 // Initialize Supabase client
-const { createClient } = require('@supabase/supabase-js'); // Required for Node.js
+// const { createClient } = require('@supabase/supabase-js'); // Required for Node.js
 // or if using a CDN:
-// const { createClient } = supabase;
+const { createClient } = supabase;
 
 const SUPABASE_URL = 'https://oztjzscfexuysiadcuzp.supabase.co'; // Replace with your Supabase URL
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96dGp6c2NmZXh1eXNpYWRjdXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMjY0ODYsImV4cCI6MjA1MjYwMjQ4Nn0.xsfo1W0hJSzYREYoBD3PYN79SuLd_8whoEwTECbQLH8'; // Replace with your Supabase Anon key
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+async function getInfoSupa() {
+    try {
+        const response = await fetch(supabase)
+        if(!response.ok) {
+            throw new Error(`response status: ${response.status}`)
+        }
+        const data = await response.json()
+        console.log("data", data)
+    } catch (error) {
+        console.error("Error", error)
+    }
+}
 
 const mainContainer = document.querySelector(".todo-section")
 const input = document.querySelector(".desc-input") as HTMLInputElement
