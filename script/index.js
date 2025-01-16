@@ -1,3 +1,10 @@
+// Initialize Supabase client
+var createClient = require('@supabase/supabase-js').createClient; // Required for Node.js
+// or if using a CDN:
+// const { createClient } = supabase;
+var SUPABASE_URL = 'https://oztjzscfexuysiadcuzp.supabase.co'; // Replace with your Supabase URL
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96dGp6c2NmZXh1eXNpYWRjdXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMjY0ODYsImV4cCI6MjA1MjYwMjQ4Nn0.xsfo1W0hJSzYREYoBD3PYN79SuLd_8whoEwTECbQLH8'; // Replace with your Supabase Anon key
+var supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 var mainContainer = document.querySelector(".todo-section");
 var input = document.querySelector(".desc-input");
 var saveBtn = document.querySelector(".btn-save");
@@ -5,25 +12,24 @@ var clearBtn = document.querySelector(".btn-clear");
 var todoItems = document.querySelectorAll("todo-element");
 var count = 0;
 var localStorageInfo = [];
+var smtharray = JSON.parse(localStorage.localStorageInfo);
+smtharray.forEach(function (item) {
+    count++;
+    item.id = count;
+    createTodo(item);
+});
 saveBtn.addEventListener("click", function () {
     var todo = {
         id: count,
         description: input.value,
         status: true
     };
+    count++;
     createTodo(todo);
 });
-var smtharray = JSON.parse(localStorage.localStorageInfo);
-console.log("smtharray", smtharray);
-smtharray.forEach(function (item) {
-    createTodo(item);
-});
 function createTodo(todo) {
-    count++;
-    console.log(todo);
     localStorageInfo.push(todo);
     localStorage.setItem("localStorageInfo", JSON.stringify(localStorageInfo));
-    console.log("localStorageInfo", localStorageInfo);
     var divs = document.createElement("div");
     mainContainer.appendChild(divs);
     divs.classList.add("todo-element");
@@ -40,7 +46,6 @@ function createTodo(todo) {
             description.style.textDecoration = "none";
             todo.status = true;
         }
-        console.log("todo", todo);
     });
     var edit = document.createElement("button");
     divs.appendChild(edit);
@@ -53,6 +58,7 @@ function createTodo(todo) {
         editSave.textContent = "save";
         editSave.addEventListener("click", function () {
             description.textContent = editInput.value;
+            todo.description = editInput.value;
             localStorage.setItem("localStorageInfo", JSON.stringify(localStorageInfo));
             editInput.remove();
             editSave.remove();
